@@ -7,5 +7,6 @@ Locales["cs"] = {
     ["cant_carry_more"] = "Více toho neuneseš.",
     ["nacho_veh"] = "Toto není tvoje vozidlo.",
     ["invalid_amount"] = "Špatný počet!",
-    ["insufficient_space"] = "Nedostatek místa!"
+    ["insufficient_space"] = "Nedostatek místa!",
+    ["trunk_info"] = "<h3>Kufr vozidla</h3><br><strong>SPZ:</strong> %s<br><strong>Kapacita:</strong> %s / %s"
 }

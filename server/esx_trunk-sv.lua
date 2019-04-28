@@ -185,7 +185,7 @@ AddEventHandler(
 
           local weight = getTotalInventoryWeight(plate)
 
-          text = "<h3>Kufr vozidla</h3><br><strong>SPZ:</strong> " .. plate .. "<br><strong>Kapacita:</strong> " .. (weight / 1000) .. " / " .. (max / 1000)
+          text = _U("trunk_info", plate, (weight / 1000), (max / 1000))
           data = {plate = plate, max = max, myVeh = owned, text = text}
           TriggerClientEvent("esx_inventoryhud:refreshTrunkInventory", _source, data, blackMoney, items, weapons)
         end
@@ -220,7 +220,7 @@ AddEventHandler(
 
             local weight = getTotalInventoryWeight(plate)
 
-            text = "<h3>Kufr vozidla</h3><br><strong>SPZ:</strong> " .. plate .. "<br><strong>Kapacita:</strong> " .. (weight / 1000) .. " / " .. (max / 1000)
+            text = _U("trunk_info", plate, (weight / 1000), (max / 1000))
             data = {plate = plate, max = max, myVeh = owned, text = text}
             TriggerClientEvent("esx_inventoryhud:refreshTrunkInventory", _source, data, blackMoney, items, weapons)
           else
@@ -286,7 +286,7 @@ AddEventHandler(
 
           local weight = getTotalInventoryWeight(plate)
 
-          text = "<h3>Kufr vozidla</h3><br><strong>SPZ:</strong> " .. plate .. "<br><strong>Kapacita:</strong> " .. (weight / 1000) .. " / " .. (max / 1000)
+          text = _U("trunk_info", plate, (weight / 1000), (max / 1000))
           data = {plate = plate, max = max, myVeh = owned, text = text}
           TriggerClientEvent("esx_inventoryhud:refreshTrunkInventory", _source, data, blackMoney, items, weapons)
         end
@@ -298,7 +298,7 @@ AddEventHandler(
 RegisterServerEvent("esx_trunk:putItem")
 AddEventHandler(
   "esx_trunk:putItem",
-  function(plate, type, item, count, max, owned)
+  function(plate, type, item, count, max, owned, label)
     local _source = source
     local xPlayer = ESX.GetPlayerFromId(_source)
     local xPlayerOwner = ESX.GetPlayerFromIdentifier(owner)
@@ -444,6 +444,7 @@ AddEventHandler(
             storeWeapons,
             {
               name = item,
+              label = label,
               ammo = count
             }
           )
@@ -496,7 +497,7 @@ AddEventHandler(
 
         local weight = getTotalInventoryWeight(plate)
 
-        text = "<h3>Kufr vozidla</h3><br><strong>SPZ:</strong> " .. plate .. "<br><strong>Kapacita:</strong> " .. (weight / 1000) .. " / " .. (max / 1000)
+        text = _U("trunk_info", plate, (weight / 1000), (max / 1000))
         data = {plate = plate, max = max, myVeh = owned, text = text}
         TriggerClientEvent("esx_inventoryhud:refreshTrunkInventory", _source, data, blackMoney, items, weapons)
       end

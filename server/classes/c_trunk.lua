@@ -2,8 +2,9 @@ function stringsplit(inputstr, sep)
   if sep == nil then
     sep = "%s"
   end
-  local t={} ; i=1
-  for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+  local t = {}
+  i = 1
+  for str in string.gmatch(inputstr, "([^" .. sep .. "]+)") do
     t[i] = str
     i = i + 1
   end
@@ -11,12 +12,11 @@ function stringsplit(inputstr, sep)
 end
 
 function CreateDataStore(plate, owned, data)
-
   local self = {}
 
-  self.plate  = plate
+  self.plate = plate
   self.owned = owned
-  self.data  = data
+  self.data = data
 
   local timeoutCallbacks = {}
 
@@ -26,11 +26,10 @@ function CreateDataStore(plate, owned, data)
   end
 
   self.get = function(key, i)
+    local path = stringsplit(key, ".")
+    local obj = self.data
 
-    local path = stringsplit(key, '.')
-    local obj  = self.data
-
-    for i=1, #path, 1 do
+    for i = 1, #path, 1 do
       obj = obj[path[i]]
     end
 
@@ -39,15 +38,13 @@ function CreateDataStore(plate, owned, data)
     else
       return obj[i]
     end
-
   end
 
   self.count = function(key, i)
+    local path = stringsplit(key, ".")
+    local obj = self.data
 
-    local path = stringsplit(key, '.')
-    local obj  = self.data
-
-    for i=1, #path, 1 do
+    for i = 1, #path, 1 do
       obj = obj[path[i]]
     end
 
@@ -60,32 +57,30 @@ function CreateDataStore(plate, owned, data)
     else
       return #obj
     end
-
   end
 
   self.save = function()
-
-    for i=1, #timeoutCallbacks, 1 do
+    for i = 1, #timeoutCallbacks, 1 do
       ESX.ClearTimeout(timeoutCallbacks[i])
       timeoutCallbacks[i] = nil
     end
 
-    local timeoutCallback = ESX.SetTimeout(10000, function()
-
+    local timeoutCallback =
+      ESX.SetTimeout(
+      10000,
+      function()
         MySQL.Async.execute(
-          'UPDATE trunk_inventory SET data = @data WHERE plate = @plate',
+          "UPDATE trunk_inventory SET data = @data WHERE plate = @plate",
           {
-            ['@data'] = json.encode(self.data),
-            ['@plate'] = self.plate,
+            ["@data"] = json.encode(self.data),
+            ["@plate"] = self.plate
           }
         )
-
-    end)
+      end
+    )
 
     table.insert(timeoutCallbacks, timeoutCallback)
-
   end
 
   return self
-
 end
