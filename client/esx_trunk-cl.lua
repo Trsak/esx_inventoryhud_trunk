@@ -87,93 +87,96 @@ function openmenuvehicle()
   local vehicle = VehicleInFront()
   globalplate = GetVehicleNumberPlateText(vehicle)
 
-  myVeh = false
-  local thisVeh = VehicleInFront()
-  PlayerData = ESX.GetPlayerData()
-  for i = 1, #vehiclePlate do
-    local vPlate = all_trim(vehiclePlate[i].plate)
-    local vFront = all_trim(GetVehicleNumberPlateText(thisVeh))
-    --print('vPlate: ',vPlate)
-    --print('vFront: ',vFront)
-    --if vehiclePlate[i].plate == GetVehicleNumberPlateText(vehFront) then
-    if vPlate == vFront then
-      myVeh = true
-    elseif lastChecked < GetGameTimer() - 60000 then
-      TriggerServerEvent("esx_trunk_inventory:getOwnedVehicule")
-      lastChecked = GetGameTimer()
-      Wait(2000)
-      for i = 1, #vehiclePlate do
-        local vPlate = all_trim(vehiclePlate[i].plate)
-        local vFront = all_trim(GetVehicleNumberPlateText(thisVeh))
-        if vPlate == vFront then
-          myVeh = true
-        end
-      end
-    end
-  end
+  if not IsPedInAnyVehicle(playerPed) then
+    myVeh = false
+    local thisVeh = VehicleInFront()
+    PlayerData = ESX.GetPlayerData()
 
-  if not Config.CheckOwnership or (Config.AllowPolice and PlayerData.job.name == "police") or (Config.CheckOwnership and myVeh) then
-    if globalplate ~= nil or globalplate ~= "" or globalplate ~= " " then
-      CloseToVehicle = true
-      local vehFront = VehicleInFront()
-      local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
-      local closecar = GetClosestVehicle(x, y, z, 4.0, 0, 71)
-
-      if vehFront > 0 and closecar ~= nil and GetPedInVehicleSeat(closecar, -1) ~= GetPlayerPed(-1) then
-        lastVehicle = vehFront
-        local model = GetDisplayNameFromVehicleModel(GetEntityModel(closecar))
-        local locked = GetVehicleDoorLockStatus(closecar)
-        local class = GetVehicleClass(vehFront)
-        ESX.UI.Menu.CloseAll()
-
-        if ESX.UI.Menu.IsOpen("default", GetCurrentResourceName(), "inventory") then
-          SetVehicleDoorShut(vehFront, 5, false)
-        else
-          if locked == 1 or class == 15 or class == 16 or class == 14 then
-            SetVehicleDoorOpen(vehFront, 5, false, false)
-            ESX.UI.Menu.CloseAll()
-
-            if globalplate ~= nil or globalplate ~= "" or globalplate ~= " " then
-              CloseToVehicle = true
-              OpenCoffreInventoryMenu(GetVehicleNumberPlateText(vehFront), Config.VehicleLimit[class], myVeh)
-            end
-          else
-            exports.pNotify:SendNotification(
-              {
-                text = _U("trunk_closed"),
-                type = "error",
-                timeout = 3000,
-                layout = "bottomCenter",
-                queue = "trunk"
-              }
-            )
+    for i = 1, #vehiclePlate do
+      local vPlate = all_trim(vehiclePlate[i].plate)
+      local vFront = all_trim(GetVehicleNumberPlateText(thisVeh))
+      --print('vPlate: ',vPlate)
+      --print('vFront: ',vFront)
+      --if vehiclePlate[i].plate == GetVehicleNumberPlateText(vehFront) then
+      if vPlate == vFront then
+        myVeh = true
+      elseif lastChecked < GetGameTimer() - 60000 then
+        TriggerServerEvent("esx_trunk_inventory:getOwnedVehicule")
+        lastChecked = GetGameTimer()
+        Wait(2000)
+        for i = 1, #vehiclePlate do
+          local vPlate = all_trim(vehiclePlate[i].plate)
+          local vFront = all_trim(GetVehicleNumberPlateText(thisVeh))
+          if vPlate == vFront then
+            myVeh = true
           end
         end
-      else
-        exports.pNotify:SendNotification(
-          {
-            text = _U("no_veh_nearby"),
-            type = "error",
-            timeout = 3000,
-            layout = "bottomCenter",
-            queue = "trunk"
-          }
-        )
       end
-      lastOpen = true
-      GUI.Time = GetGameTimer()
     end
-  else
-    -- Not their vehicle
-    exports.pNotify:SendNotification(
-      {
-        text = _U("nacho_veh"),
-        type = "error",
-        timeout = 3000,
-        layout = "bottomCenter",
-        queue = "trunk"
-      }
-    )
+
+    if not Config.CheckOwnership or (Config.AllowPolice and PlayerData.job.name == "police") or (Config.CheckOwnership and myVeh) then
+      if globalplate ~= nil or globalplate ~= "" or globalplate ~= " " then
+        CloseToVehicle = true
+        local vehFront = VehicleInFront()
+        local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
+        local closecar = GetClosestVehicle(x, y, z, 4.0, 0, 71)
+
+        if vehFront > 0 and closecar ~= nil and GetPedInVehicleSeat(closecar, -1) ~= GetPlayerPed(-1) then
+          lastVehicle = vehFront
+          local model = GetDisplayNameFromVehicleModel(GetEntityModel(closecar))
+          local locked = GetVehicleDoorLockStatus(closecar)
+          local class = GetVehicleClass(vehFront)
+          ESX.UI.Menu.CloseAll()
+
+          if ESX.UI.Menu.IsOpen("default", GetCurrentResourceName(), "inventory") then
+            SetVehicleDoorShut(vehFront, 5, false)
+          else
+            if locked == 1 or class == 15 or class == 16 or class == 14 then
+              SetVehicleDoorOpen(vehFront, 5, false, false)
+              ESX.UI.Menu.CloseAll()
+
+              if globalplate ~= nil or globalplate ~= "" or globalplate ~= " " then
+                CloseToVehicle = true
+                OpenCoffreInventoryMenu(GetVehicleNumberPlateText(vehFront), Config.VehicleLimit[class], myVeh)
+              end
+            else
+              exports.pNotify:SendNotification(
+                {
+                  text = _U("trunk_closed"),
+                  type = "error",
+                  timeout = 3000,
+                  layout = "bottomCenter",
+                  queue = "trunk"
+                }
+              )
+            end
+          end
+        else
+          exports.pNotify:SendNotification(
+            {
+              text = _U("no_veh_nearby"),
+              type = "error",
+              timeout = 3000,
+              layout = "bottomCenter",
+              queue = "trunk"
+            }
+          )
+        end
+        lastOpen = true
+        GUI.Time = GetGameTimer()
+      end
+    else
+      -- Not their vehicle
+      exports.pNotify:SendNotification(
+        {
+          text = _U("nacho_veh"),
+          type = "error",
+          timeout = 3000,
+          layout = "bottomCenter",
+          queue = "trunk"
+        }
+      )
+    end
   end
 end
 local count = 0
@@ -225,7 +228,7 @@ function OpenCoffreInventoryMenu(plate, max, myVeh)
   ESX.TriggerServerCallback(
     "esx_trunk:getInventoryV",
     function(inventory)
-      text = _U('trunk_info', plate, (inventory.weight / 1000), (max / 1000))
+      text = _U("trunk_info", plate, (inventory.weight / 1000), (max / 1000))
       data = {plate = plate, max = max, myVeh = myVeh, text = text}
       TriggerEvent("esx_inventoryhud:openTrunkInventory", data, inventory.blackMoney, inventory.items, inventory.weapons)
     end,
