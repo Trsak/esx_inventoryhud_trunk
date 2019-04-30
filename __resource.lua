@@ -10,6 +10,7 @@ server_scripts {
   "@es_extended/locale.lua",
   "locales/en.lua",
   "locales/cs.lua",
+  "locales/fr.lua",
   "config.lua",
   "server/classes/c_trunk.lua",
   "server/trunk.lua",
@@ -20,6 +21,7 @@ client_scripts {
   "@es_extended/locale.lua",
   "locales/en.lua",
   "locales/cs.lua",
+  "locales/fr.lua",
   "config.lua",
   "client/esx_trunk-cl.lua"
 }
