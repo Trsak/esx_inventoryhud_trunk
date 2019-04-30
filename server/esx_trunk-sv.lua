@@ -134,62 +134,77 @@ AddEventHandler(
     local xPlayer = ESX.GetPlayerFromId(_source)
 
     if type == "item_standard" then
-      TriggerEvent(
-        "esx_trunk:getSharedDataStore",
-        plate,
-        function(store)
-          local coffre = (store.get("coffre") or {})
-          for i = 1, #coffre, 1 do
-            if coffre[i].name == item then
-              if (coffre[i].count >= count and count > 0) then
-                xPlayer.addInventoryItem(item, count)
-                if (coffre[i].count - count) == 0 then
-                  table.remove(coffre, i)
-                else
-                  coffre[i].count = coffre[i].count - count
-                end
+      local targetItem = xPlayer.getInventoryItem(item)
+      if targetItem.limit == -1 or ((targetItem.count + count) <= targetItem.limit) then
+        TriggerEvent(
+          "esx_trunk:getSharedDataStore",
+          plate,
+          function(store)
+            local coffre = (store.get("coffre") or {})
+            for i = 1, #coffre, 1 do
+              if coffre[i].name == item then
+                if (coffre[i].count >= count and count > 0) then
+                  xPlayer.addInventoryItem(item, count)
+                  if (coffre[i].count - count) == 0 then
+                    table.remove(coffre, i)
+                  else
+                    coffre[i].count = coffre[i].count - count
+                  end
 
-                break
-              else
-                TriggerClientEvent(
-                  "pNotify:SendNotification",
-                  _source,
-                  {
-                    text = _U("invalid_quantity"),
-                    type = "error",
-                    queue = "trunk",
-                    timeout = 3000,
-                    layout = "bottomCenter"
-                  }
-                )
+                  break
+                else
+                  TriggerClientEvent(
+                    "pNotify:SendNotification",
+                    _source,
+                    {
+                      text = _U("invalid_quantity"),
+                      type = "error",
+                      queue = "trunk",
+                      timeout = 3000,
+                      layout = "bottomCenter"
+                    }
+                  )
+                end
               end
             end
+
+            store.set("coffre", coffre)
+
+            local blackMoney = 0
+            local items = {}
+            local weapons = {}
+            weapons = (store.get("weapons") or {})
+
+            local blackAccount = (store.get("black_money")) or 0
+            if blackAccount ~= 0 then
+              blackMoney = blackAccount[1].amount
+            end
+
+            local coffre = (store.get("coffre") or {})
+            for i = 1, #coffre, 1 do
+              table.insert(items, {name = coffre[i].name, count = coffre[i].count, label = ESX.GetItemLabel(coffre[i].name)})
+            end
+
+            local weight = getTotalInventoryWeight(plate)
+
+            text = _U("trunk_info", plate, (weight / 1000), (max / 1000))
+            data = {plate = plate, max = max, myVeh = owned, text = text}
+            TriggerClientEvent("esx_inventoryhud:refreshTrunkInventory", _source, data, blackMoney, items, weapons)
           end
-
-          store.set("coffre", coffre)
-
-          local blackMoney = 0
-          local items = {}
-          local weapons = {}
-          weapons = (store.get("weapons") or {})
-
-          local blackAccount = (store.get("black_money")) or 0
-          if blackAccount ~= 0 then
-            blackMoney = blackAccount[1].amount
-          end
-
-          local coffre = (store.get("coffre") or {})
-          for i = 1, #coffre, 1 do
-            table.insert(items, {name = coffre[i].name, count = coffre[i].count, label = ESX.GetItemLabel(coffre[i].name)})
-          end
-
-          local weight = getTotalInventoryWeight(plate)
-
-          text = _U("trunk_info", plate, (weight / 1000), (max / 1000))
-          data = {plate = plate, max = max, myVeh = owned, text = text}
-          TriggerClientEvent("esx_inventoryhud:refreshTrunkInventory", _source, data, blackMoney, items, weapons)
-        end
-      )
+        )
+      else
+        TriggerClientEvent(
+          "pNotify:SendNotification",
+          _source,
+          {
+            text = _U("player_inv_no_space"),
+            type = "error",
+            queue = "trunk",
+            timeout = 3000,
+            layout = "bottomCenter"
+          }
+        )
+      end
     end
 
     if type == "item_account" then

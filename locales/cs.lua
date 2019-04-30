@@ -8,5 +8,6 @@ Locales["cs"] = {
     ["nacho_veh"] = "Toto není tvoje vozidlo.",
     ["invalid_amount"] = "Špatný počet!",
     ["insufficient_space"] = "Nedostatek místa!",
-    ["trunk_info"] = "<h3>Kufr vozidla</h3><br><strong>SPZ:</strong> %s<br><strong>Kapacita:</strong> %s / %s"
+    ["trunk_info"] = "<h3>Kufr vozidla</h3><br><strong>SPZ:</strong> %s<br><strong>Kapacita:</strong> %s / %s",
+    ["player_inv_no_space"] = "Tolik toho mít v inventáři nemůžeš!"
 }

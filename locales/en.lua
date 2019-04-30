@@ -8,5 +8,6 @@ Locales["en"] = {
   ["nacho_veh"] = "This is not your vehicle.",
   ["invalid_amount"] = "Invalid amount",
   ["insufficient_space"] = "Insufficient space",
-  ["trunk_info"] = "<h3>Vehicle trunk</h3><br><strong>Plate:</strong> %s<br><strong>Capacity:</strong> %s / %s"
+  ["trunk_info"] = "<h3>Vehicle trunk</h3><br><strong>Plate:</strong> %s<br><strong>Capacity:</strong> %s / %s",
+  ["player_inv_no_space"] = "Not enough space for that item in your inventory!"
 }
