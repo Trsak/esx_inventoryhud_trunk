@@ -9,4 +9,5 @@ Locales["fr"] = {
   ["invalid_amount"] = "Montant invalide",
   ["insufficient_space"] = "Espace insuffisant",
   ["trunk_info"] = "<h3>Coffre de véhicule</h3><br><strong>Plaque:</strong> %s<br><strong>Capacité:</strong> %s / %s"
+  ["player_inv_no_space"] = "Pas assez d'espace dans votre inventaire!"
 }
