@@ -30,7 +30,7 @@ AddEventHandler(
   "esx:playerLoaded",
   function(xPlayer)
     PlayerData = xPlayer
-    TriggerServerEvent("esx_trunk_inventory:getOwnedVehicule")
+    TriggerServerEvent("esx_inventoryhud_trunk:getOwnedVehicule")
     lastChecked = GetGameTimer()
   end
 )
@@ -39,7 +39,7 @@ AddEventHandler(
   "onResourceStart",
   function()
     PlayerData = xPlayer
-    TriggerServerEvent("esx_trunk_inventory:getOwnedVehicule")
+    TriggerServerEvent("esx_inventoryhud_trunk:getOwnedVehicule")
     lastChecked = GetGameTimer()
   end
 )
@@ -52,9 +52,9 @@ AddEventHandler(
   end
 )
 
-RegisterNetEvent("esx_trunk_inventory:setOwnedVehicule")
+RegisterNetEvent("esx_inventoryhud_trunk:setOwnedVehicule")
 AddEventHandler(
-  "esx_trunk_inventory:setOwnedVehicule",
+  "esx_inventoryhud_trunk:setOwnedVehicule",
   function(vehicle)
     vehiclePlate = vehicle
     --print("vehiclePlate: ", ESX.DumpTable(vehiclePlate))
@@ -101,7 +101,7 @@ function openmenuvehicle()
       if vPlate == vFront then
         myVeh = true
       elseif lastChecked < GetGameTimer() - 60000 then
-        TriggerServerEvent("esx_trunk_inventory:getOwnedVehicule")
+        TriggerServerEvent("esx_inventoryhud_trunk:getOwnedVehicule")
         lastChecked = GetGameTimer()
         Wait(2000)
         for i = 1, #vehiclePlate do
@@ -219,14 +219,14 @@ AddEventHandler(
   "esx:playerLoaded",
   function(xPlayer)
     PlayerData = xPlayer
-    TriggerServerEvent("esx_trunk_inventory:getOwnedVehicule")
+    TriggerServerEvent("esx_inventoryhud_trunk:getOwnedVehicule")
     lastChecked = GetGameTimer()
   end
 )
 
 function OpenCoffreInventoryMenu(plate, max, myVeh)
   ESX.TriggerServerCallback(
-    "esx_trunk:getInventoryV",
+    "esx_inventoryhud_trunk:getInventoryV",
     function(inventory)
       text = _U("trunk_info", plate, (inventory.weight / 1000), (max / 1000))
       data = {plate = plate, max = max, myVeh = myVeh, text = text}
