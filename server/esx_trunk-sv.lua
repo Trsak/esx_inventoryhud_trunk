@@ -17,9 +17,9 @@ AddEventHandler(
   end
 )
 
-RegisterServerEvent("esx_trunk_inventory:getOwnedVehicule")
+RegisterServerEvent("esx_inventoryhud_trunk:getOwnedVehicule")
 AddEventHandler(
-  "esx_trunk_inventory:getOwnedVehicule",
+  "esx_inventoryhud_trunk:getOwnedVehicule",
   function()
     local vehicules = {}
     local _source = source
@@ -36,7 +36,7 @@ AddEventHandler(
             table.insert(vehicules, {plate = vehicle.plate})
           end
         end
-        TriggerClientEvent("esx_trunk_inventory:setOwnedVehicule", _source, vehicules)
+        TriggerClientEvent("esx_inventoryhud_trunk:setOwnedVehicule", _source, vehicules)
       end
     )
   end
@@ -74,7 +74,7 @@ end
 function getTotalInventoryWeight(plate)
   local total
   TriggerEvent(
-    "esx_trunk:getSharedDataStore",
+    "esx_inventoryhud_trunk:getSharedDataStore",
     plate,
     function(store)
       local W_weapons = getInventoryWeight(store.get("weapons") or {})
@@ -91,10 +91,10 @@ function getTotalInventoryWeight(plate)
 end
 
 ESX.RegisterServerCallback(
-  "esx_trunk:getInventoryV",
+  "esx_inventoryhud_trunk:getInventoryV",
   function(source, cb, plate)
     TriggerEvent(
-      "esx_trunk:getSharedDataStore",
+      "esx_inventoryhud_trunk:getSharedDataStore",
       plate,
       function(store)
         local blackMoney = 0
@@ -126,9 +126,9 @@ ESX.RegisterServerCallback(
   end
 )
 
-RegisterServerEvent("esx_trunk:getItem")
+RegisterServerEvent("esx_inventoryhud_trunk:getItem")
 AddEventHandler(
-  "esx_trunk:getItem",
+  "esx_inventoryhud_trunk:getItem",
   function(plate, type, item, count, max, owned)
     local _source = source
     local xPlayer = ESX.GetPlayerFromId(_source)
@@ -137,7 +137,7 @@ AddEventHandler(
       local targetItem = xPlayer.getInventoryItem(item)
       if targetItem.limit == -1 or ((targetItem.count + count) <= targetItem.limit) then
         TriggerEvent(
-          "esx_trunk:getSharedDataStore",
+          "esx_inventoryhud_trunk:getSharedDataStore",
           plate,
           function(store)
             local coffre = (store.get("coffre") or {})
@@ -209,7 +209,7 @@ AddEventHandler(
 
     if type == "item_account" then
       TriggerEvent(
-        "esx_trunk:getSharedDataStore",
+        "esx_inventoryhud_trunk:getSharedDataStore",
         plate,
         function(store)
           local blackMoney = store.get("black_money")
@@ -257,7 +257,7 @@ AddEventHandler(
 
     if type == "item_weapon" then
       TriggerEvent(
-        "esx_trunk:getSharedDataStore",
+        "esx_inventoryhud_trunk:getSharedDataStore",
         plate,
         function(store)
           local storeWeapons = store.get("weapons")
@@ -310,9 +310,9 @@ AddEventHandler(
   end
 )
 
-RegisterServerEvent("esx_trunk:putItem")
+RegisterServerEvent("esx_inventoryhud_trunk:putItem")
 AddEventHandler(
-  "esx_trunk:putItem",
+  "esx_inventoryhud_trunk:putItem",
   function(plate, type, item, count, max, owned, label)
     local _source = source
     local xPlayer = ESX.GetPlayerFromId(_source)
@@ -323,7 +323,7 @@ AddEventHandler(
 
       if (playerItemCount >= count and count > 0) then
         TriggerEvent(
-          "esx_trunk:getSharedDataStore",
+          "esx_inventoryhud_trunk:getSharedDataStore",
           plate,
           function(store)
             local found = false
@@ -391,7 +391,7 @@ AddEventHandler(
 
       if (playerAccountMoney >= count and count > 0) then
         TriggerEvent(
-          "esx_trunk:getSharedDataStore",
+          "esx_inventoryhud_trunk:getSharedDataStore",
           plate,
           function(store)
             local blackMoney = (store.get("black_money") or nil)
@@ -446,7 +446,7 @@ AddEventHandler(
 
     if type == "item_weapon" then
       TriggerEvent(
-        "esx_trunk:getSharedDataStore",
+        "esx_inventoryhud_trunk:getSharedDataStore",
         plate,
         function(store)
           local storeWeapons = store.get("weapons")
@@ -492,7 +492,7 @@ AddEventHandler(
     end
 
     TriggerEvent(
-      "esx_trunk:getSharedDataStore",
+      "esx_inventoryhud_trunk:getSharedDataStore",
       plate,
       function(store)
         local blackMoney = 0
@@ -521,7 +521,7 @@ AddEventHandler(
 )
 
 ESX.RegisterServerCallback(
-  "esx_trunk:getPlayerInventory",
+  "esx_inventoryhud_trunk:getPlayerInventory",
   function(source, cb)
     local xPlayer = ESX.GetPlayerFromId(source)
     local blackMoney = xPlayer.getAccount("black_money").money
