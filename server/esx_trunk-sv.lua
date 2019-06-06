@@ -30,7 +30,7 @@ AddEventHandler('onMySQLReady', function ()
       end
     )
   end
-end)
+end) 
 
 RegisterServerEvent("esx_trunk_inventory:getOwnedVehicule")
 AddEventHandler(
