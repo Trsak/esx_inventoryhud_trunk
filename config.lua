@@ -89,6 +89,9 @@ Config.OpenKey = Keys["Y"]
 -- Limit, unit can be whatever you want. Originally grams (as average people can hold 25kg)
 Config.Limit = 25000
 
+-- If you are using esx_avanced_inventory SqlBased weight for your items
+Config.WeightSqlBased = false
+
 -- Default weight for an item:
 -- weight == 0 : The item do not affect character inventory weight
 -- weight > 0 : The item cost place on inventory
