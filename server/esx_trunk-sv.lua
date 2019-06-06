@@ -18,7 +18,7 @@ AddEventHandler(
 )
 
 AddEventHandler('onMySQLReady', function ()
-  if Config.WeightSqlBased == true then
+  if Config.WeightSqlBased then
     MySQL.Async.fetchAll(
       'SELECT * FROM item_weight',
       {},
