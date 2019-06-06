@@ -17,6 +17,21 @@ AddEventHandler(
   end
 )
 
+AddEventHandler('onMySQLReady', function ()
+  if Config.WeightSqlBased == true then
+    MySQL.Async.fetchAll(
+      'SELECT * FROM item_weight',
+      {},
+      function(result)
+        for i=1, #result, 1 do
+          arrayWeight[result[i].item] = result[i].weight
+        end
+
+      end
+    )
+  end
+end)
+
 RegisterServerEvent("esx_trunk_inventory:getOwnedVehicule")
 AddEventHandler(
   "esx_trunk_inventory:getOwnedVehicule",
