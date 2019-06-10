@@ -358,8 +358,8 @@ AddEventHandler(
               )
             else
               -- Checks passed, storing the item.
-              store.set("coffre", coffre)
               xPlayer.removeInventoryItem(item, count)
+              store.set("coffre", coffre)
 
               MySQL.Async.execute(
                 "UPDATE trunk_inventory SET owned = @owned WHERE plate = @plate",
