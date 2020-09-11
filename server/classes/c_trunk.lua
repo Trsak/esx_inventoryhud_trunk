@@ -69,7 +69,7 @@ function CreateDataStore(plate, owned, data)
             ESX.SetTimeout(
             10000,
             function()
-                vSql.Async.execute(
+                MySQL.Async.execute(
                     "UPDATE trunk_inventory SET data = @data WHERE plate = @plate",
                     {
                         ["@data"] = json.encode(self.data),

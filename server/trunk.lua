@@ -11,9 +11,9 @@ TriggerEvent(
     end
 )
 
-vSql.ready(
+MySQL.ready(
     function()
-        vSql.Async.fetchAll(
+        MySQL.Async.fetchAll(
             "SELECT * FROM trunk_inventory",
             {},
             function(result)
@@ -33,7 +33,7 @@ vSql.ready(
 )
 
 function loadInvent(plate)
-    vSql.Async.fetchAll(
+    MySQL.Async.fetchAll(
         "SELECT * FROM trunk_inventory WHERE plate = @plate LIMIT 1",
         {
             ["@plate"] = plate
@@ -56,7 +56,7 @@ end
 function MakeDataStore(plate, cb)
     local data = {}
 
-    vSql.Async.fetchAll(
+    MySQL.Async.fetchAll(
         "SELECT 1 FROM owned_vehicles WHERE plate = @plate LIMIT 1",
         {
             ["@plate"] = plate
@@ -71,7 +71,7 @@ function MakeDataStore(plate, cb)
             local dataStore = CreateDataStore(plate, owned, data)
             SharedDataStores[plate] = dataStore
 
-            vSql.Async.execute(
+            MySQL.Async.execute(
                 "INSERT INTO trunk_inventory (plate, data, owned) VALUES (@plate, '{}', @owned)",
                 {
                     ["@plate"] = plate,

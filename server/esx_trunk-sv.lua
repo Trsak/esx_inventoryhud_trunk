@@ -8,9 +8,9 @@ TriggerEvent(
     end
 )
 
-vSql.ready(
+MySQL.ready(
     function()
-        vSql.Async.execute("DELETE FROM `trunk_inventory` WHERE `owned` = 0", {})
+        MySQL.Async.execute("DELETE FROM `trunk_inventory` WHERE `owned` = 0", {})
     end
 )
 
@@ -81,10 +81,7 @@ ESX.RegisterServerCallback(
 
                 local coffre = (store.get("coffre") or {})
                 for i = 1, #coffre, 1 do
-                    table.insert(
-                        items,
-                        {name = coffre[i].name, count = coffre[i].count, label = ESX.GetItemLabel(coffre[i].name)}
-                    )
+                    table.insert(items, {name = coffre[i].name, count = coffre[i].count, label = ESX.GetItemLabel(coffre[i].name)})
                 end
 
                 local weight = getTotalInventoryWeight(plate)
@@ -172,14 +169,7 @@ AddEventHandler(
 
                         text = _U("trunk_info", plate, (weight / 1000), (max / 1000))
                         data = {plate = plate, max = max, myVeh = owned, text = text}
-                        TriggerClientEvent(
-                            "esx_inventoryhud:refreshTrunkInventory",
-                            _source,
-                            data,
-                            blackMoney,
-                            items,
-                            weapons
-                        )
+                        TriggerClientEvent("esx_inventoryhud:refreshTrunkInventory", _source, data, blackMoney, items, weapons)
                     end
                 )
             else
@@ -232,14 +222,7 @@ AddEventHandler(
 
                         text = _U("trunk_info", plate, (weight / 1000), (max / 1000))
                         data = {plate = plate, max = max, myVeh = owned, text = text}
-                        TriggerClientEvent(
-                            "esx_inventoryhud:refreshTrunkInventory",
-                            _source,
-                            data,
-                            blackMoney,
-                            items,
-                            weapons
-                        )
+                        TriggerClientEvent("esx_inventoryhud:refreshTrunkInventory", _source, data, blackMoney, items, weapons)
                     else
                         TriggerClientEvent(
                             "pNotify:SendNotification",
@@ -330,14 +313,7 @@ AddEventHandler(
 
                         text = _U("trunk_info", plate, (weight / 1000), (max / 1000))
                         data = {plate = plate, max = max, myVeh = owned, text = text}
-                        TriggerClientEvent(
-                            "esx_inventoryhud:refreshTrunkInventory",
-                            _source,
-                            data,
-                            blackMoney,
-                            items,
-                            weapons
-                        )
+                        TriggerClientEvent("esx_inventoryhud:refreshTrunkInventory", _source, data, blackMoney, items, weapons)
                     end
                 )
             end
@@ -395,7 +371,7 @@ AddEventHandler(
                             store.set("coffre", coffre)
                             xPlayer.removeInventoryItem(item, count)
 
-                            vSql.Async.execute(
+                            MySQL.Async.execute(
                                 "UPDATE trunk_inventory SET owned = @owned WHERE plate = @plate",
                                 {
                                     ["@plate"] = plate,
@@ -453,7 +429,7 @@ AddEventHandler(
                             xPlayer.removeAccountMoney(item, count)
                             store.set("black_money", blackMoney)
 
-                            vSql.Async.execute(
+                            MySQL.Async.execute(
                                 "UPDATE trunk_inventory SET owned = @owned WHERE plate = @plate",
                                 {
                                     ["@plate"] = plate,
@@ -484,7 +460,7 @@ AddEventHandler(
                 plate,
                 function(store)
                     local storeWeapons = store.get("weapons")
-                    
+
                     if storeWeapons == nil then
                         storeWeapons = {}
                     end
@@ -522,7 +498,7 @@ AddEventHandler(
                         store.set("weapons", storeWeapons)
                         xPlayer.removeWeapon(item)
 
-                        vSql.Async.execute(
+                        MySQL.Async.execute(
                             "UPDATE trunk_inventory SET owned = @owned WHERE plate = @plate",
                             {
                                 ["@plate"] = plate,
@@ -550,10 +526,7 @@ AddEventHandler(
 
                 local coffre = (store.get("coffre") or {})
                 for i = 1, #coffre, 1 do
-                    table.insert(
-                        items,
-                        {name = coffre[i].name, count = coffre[i].count, label = ESX.GetItemLabel(coffre[i].name)}
-                    )
+                    table.insert(items, {name = coffre[i].name, count = coffre[i].count, label = ESX.GetItemLabel(coffre[i].name)})
                 end
 
                 local weight = getTotalInventoryWeight(plate)

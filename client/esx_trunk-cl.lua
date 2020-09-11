@@ -40,49 +40,44 @@ function openmenuvehicle()
     end
 
     if DoesEntityExist(vehicle) then
-        ESX.TriggerServerCallback(
-            "esx_vehiclelock:checkLockState",
-            function(isLocked)
-                if not isLocked then
-                    local trunkpos = GetWorldPositionOfEntityBone(vehicle, GetEntityBoneIndexByName(vehicle, "boot"))
-                    local distanceToTrunk = GetDistanceBetweenCoords(coords, trunkpos, 1)
+        local lockStatus = GetVehicleDoorLockStatus(vehicle)
+        if lockStatus == 0 or lockStatus == 1 then
+            local trunkpos = GetWorldPositionOfEntityBone(vehicle, GetEntityBoneIndexByName(vehicle, "boot"))
+            local distanceToTrunk = GetDistanceBetweenCoords(coords, trunkpos, 1)
 
-                    if distanceToTrunk <= 2.0 or (trunkpos.x + trunkpos.y + trunkpos.z) == 0.0 then
-                        TriggerEvent(
-                            "mythic_progbar:client:progress",
-                            {
-                                name = "Open_Trunk",
-                                duration = 750,
-                                label = "Probíhá otevírání kufru vozidla",
-                                useWhileDead = false,
-                                canCancel = true,
-                                controlDisables = {
-                                    disableMovement = true,
-                                    disableCarMovement = true,
-                                    disableMouse = false,
-                                    disableCombat = true
-                                }
-                            },
-                            function(status)
-                                if not status then
-                                    currentVehicle = vehicle
-                                    SetVehicleDoorOpen(vehicle, 5, false, false)
-                                    local class = GetVehicleClass(vehicle)
-                                    OpenCoffreInventoryMenu(GetVehicleNumberPlateText(vehicle), Config.VehicleLimit[class])
-                                end
-                            end
-                        )
-                    else
-                        exports.pNotify:SendNotification({text = "Musíš stát u kufru vozidla", type = "error", timeout = 5000})
+            if distanceToTrunk <= 2.0 or (trunkpos.x + trunkpos.y + trunkpos.z) == 0.0 then
+                TriggerEvent(
+                    "mythic_progbar:client:progress",
+                    {
+                        name = "Open_Trunk",
+                        duration = Config.OpenTime,
+                        label = _U("trunk_opening"),
+                        useWhileDead = false,
+                        canCancel = true,
+                        controlDisables = {
+                            disableMovement = true,
+                            disableCarMovement = true,
+                            disableMouse = false,
+                            disableCombat = true
+                        }
+                    },
+                    function(status)
+                        if not status then
+                            currentVehicle = vehicle
+                            SetVehicleDoorOpen(vehicle, 5, false, false)
+                            local class = GetVehicleClass(vehicle)
+                            OpenCoffreInventoryMenu(GetVehicleNumberPlateText(vehicle), Config.VehicleLimit[class])
+                        end
                     end
-                else
-                    exports.pNotify:SendNotification({text = "Toto vozidlo je zamčené", type = "error", timeout = 5000})
-                end
-            end,
-            GetVehicleNumberPlateText(vehicle)
-        )
+                )
+            else
+                exports.pNotify:SendNotification({text = _U("trunk_nonear"), type = "error", timeout = 5000})
+            end
+        else
+            exports.pNotify:SendNotification({text = _U("trunk_locked"), type = "error", timeout = 5000})
+        end
     else
-        exports.pNotify:SendNotification({text = "Není u tebe žádné vozidlo", type = "error", timeout = 5000})
+        exports.pNotify:SendNotification({text = _U("no_veh_nearby"), type = "error", timeout = 5000})
     end
 end
 

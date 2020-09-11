@@ -79,9 +79,11 @@ local Keys = {
 
 Config = {}
 
-Config.Locale = "cs"
+Config.Locale = "en"
 
 Config.OpenKey = Keys["Y"]
+
+Config.OpenTime = 750
 
 -- Limit, unit can be whatever you want. Originally grams (as average people can hold 25kg)
 Config.Limit = 25000
