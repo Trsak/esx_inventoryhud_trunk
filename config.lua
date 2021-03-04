@@ -85,6 +85,8 @@ Config.OpenKey = Keys["Y"]
 
 Config.OpenTime = 750
 
+Config.UseLimitSystem = true -- if set to true, hud uses old esx limit system, if set to false, you can use esx weight system which is newer
+
 -- Limit, unit can be whatever you want. Originally grams (as average people can hold 25kg)
 Config.Limit = 25000
 
