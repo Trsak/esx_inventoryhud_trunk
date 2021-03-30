@@ -85,6 +85,8 @@ Config.OpenKey = Keys["Y"]
 
 Config.OpenTime = 750
 
+Config.UseLimitSystem = true -- If true, default old esx inventory limit system will be used, if set to false, new esx inventory weigh system will be used
+
 -- Limit, unit can be whatever you want. Originally grams (as average people can hold 25kg)
 Config.Limit = 25000
 

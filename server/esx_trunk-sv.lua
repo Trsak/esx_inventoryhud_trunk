@@ -98,6 +98,22 @@ ESX.RegisterServerCallback(
     end
 )
 
+function canPlayerCarryItem(targetItem, xPlayer, item, count)
+    if Config.UseLimitSystem then
+        if targetItem.limit == -1 or ((targetItem.count + count) <= targetItem.limit) then
+            return(true)
+        else
+            return(false)
+        end
+    else
+        if xPlayer.canCarryItem(item, count) then
+            return(true)
+        else
+            return(false)
+        end
+    end
+end
+
 RegisterServerEvent("esx_inventoryhud_trunk:getItem")
 AddEventHandler(
     "esx_inventoryhud_trunk:getItem",
@@ -107,7 +123,7 @@ AddEventHandler(
 
         if type == "item_standard" then
             local targetItem = xPlayer.getInventoryItem(item)
-            if targetItem.limit == -1 or ((targetItem.count + count) <= targetItem.limit) then
+            if canPlayerCarryItem(targetItem, xPlayer, item, count) then
                 TriggerEvent(
                     "esx_inventoryhud_trunk:getSharedDataStore",
                     plate,
